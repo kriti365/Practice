@@ -19,13 +19,7 @@ pipeline
 			}
 		}
 
-		stage('deploy to staging')
-		{
-		steps
-		{
-		build job: 'stageDeploy'
-		}
-		}
+		
 		
 	}
 }
