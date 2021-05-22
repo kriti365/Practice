@@ -1,0 +1,29 @@
+peline
+{
+	agent any
+ 	stages
+	{
+		stage('Build artifacts')
+		{
+		steps
+		{
+		   sh 'mvn -f /App/pom.xml clean package'
+		}
+		post
+		{
+		success
+		{
+		echo "Archiving the atifacts msg........."
+		archiveArtifacts artifacts: '**/*.jar'
+		}
+		}
+		stage('deploy to staging')
+		{
+		steps
+		{
+		build job: 'satgeDeploy'
+		}
+		}
+		
+	}
+}
