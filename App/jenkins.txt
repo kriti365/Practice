@@ -1,4 +1,4 @@
-peline
+pipeline
 {
 	agent any
  	stages
@@ -9,14 +9,16 @@ peline
 		{
 		   sh 'mvn -f /App/pom.xml clean package'
 		}
-		post
-		{
-		success
-		{
-		echo "Archiving the atifacts msg........."
-		archiveArtifacts artifacts: '**/*.jar'
+			post
+			{
+			success
+			{
+			echo "Archiving the atifacts msg........."
+			archiveArtifacts artifacts: '**/*.jar'
+			}
+			}
 		}
-		}
+
 		stage('deploy to staging')
 		{
 		steps
