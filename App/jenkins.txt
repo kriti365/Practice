@@ -19,7 +19,7 @@ pipeline
 			}
 		}
 
-		stage ("docker stage"
+		stage ("docker stage")
 		{
 		steps
 		{
