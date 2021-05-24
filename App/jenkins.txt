@@ -23,7 +23,7 @@ pipeline
 		{
 		steps
 		{
-		sh "docker build . -t dockerImage1
+		sh "docker build . -t dockerImage1:${env.BUILD_ID}"
 		}
 		}
 		
