@@ -19,11 +19,11 @@ pipeline
 			}
 		}
 
-		stage('Deploy in Staging Environment')
+		stage('Create Tomcat Docker Image')
 		{
 		steps
 		{
-		build job: 'deploy_to_staging'
+		sh "docker build . -t dockerImage1:{env.BUILD_ID}
 		}
 		}
 		
