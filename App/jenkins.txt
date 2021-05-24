@@ -23,7 +23,7 @@ pipeline
 		{
 		steps
 		{
-		sh "docker build . -t tomcatimage1"
+		sh "docker build . -t tomcatimage1 ./App/Dockerfile"
 		}
 		}
 		
