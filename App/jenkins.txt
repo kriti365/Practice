@@ -1,6 +1,14 @@
 pipeline
 {
-	agent any
+	agent 
+	{
+	docker
+	 {
+	 
+		sh "docker build . -t dockerImage1:${env.BUILD_ID}"
+		
+	 }
+	}
  	stages
 	{
 		stage('Build artifacts')
@@ -19,13 +27,7 @@ pipeline
 			}
 		}
 
-		stage('Create Tomcat Docker Image')
-		{
-		steps
-		{
-		sh "docker build . -t dockerImage1:${env.BUILD_ID}"
-		}
-		}
+		
 		
 	}
 }
