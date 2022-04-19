@@ -46,7 +46,7 @@ all:
     staging:
       ansible_connection: ssh
       ansible_user: kriti
-      ansible_host: 192.168.99.30
+      ansible_host: 172.31.9.225
       ansible_port: 22
 
 cicd/provision/stag/site.yml
