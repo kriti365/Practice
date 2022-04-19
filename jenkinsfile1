@@ -5,8 +5,11 @@ stages
 { 
  stage ("git checkout")
  {
+ steps
+ {
     echo '> Checking out the Git version control ...'
     checkout scm
+    }
     }
     }
     }
