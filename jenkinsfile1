@@ -1,0 +1,11 @@
+pipeline
+{
+agent any
+stages
+{ 
+ stage ("git checkout")
+ {
+    echo '> Checking out the Git version control ...'
+    checkout scm
+    }
+    }
