@@ -1,0 +1,86 @@
+pipeline {
+    agent any
+ 
+    options {
+        skipDefaultCheckout(true)
+    }
+ 
+    stages {
+        stage('Git') {
+            steps {
+                echo '> Checking out the Git version control ...'
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                echo '> Building the docker images ...'
+                sh 'make -sC docker/stag build'
+            }
+        }
+        stage('Push') {
+            steps {
+                echo '> Pushing docker images to DockerHub ...'
+                sh 'make -sC docker/stag push'
+            }
+        }
+        stage('Destroy') {
+            steps {
+                echo '> Destroying the docker artifacts ...'
+                sh 'make -sC docker/stag destroy'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo '> Deploying the application ...'
+                sh 'ansible-playbook cicd/provision/stag/site.yml -i cicd/provision/stag/hosts.yml'
+            }
+        }
+    }
+}
+
+cicd/provision/stag/hosts.yml
+
+all:
+  hosts:
+    staging:
+      ansible_connection: ssh
+      ansible_user: kriti
+      ansible_host: 192.168.99.30
+      ansible_port: 22
+
+cicd/provision/stag/site.yml
+
+I manually installed docker and docker-compose onto the staging server but ideally it should be done here. Also this file is open for improvements such as making use of variables so on.
+
+
+---
+# All tasks below are run in "staging" server.
+ 
+- name: Deploy the application to the "staging" server
+  hosts: staging
+  remote_user: kriti
+  become: yes
+  tasks:
+    - name: Create the application directory
+      file:
+        path: /home/kriti/mini
+        state: directory
+        owner: kriti
+        group: kriti
+    - name: Copy docker files over
+      copy:
+        src: ../../../docker/stag/
+        dest: /home/kriti/mini/docker/stag
+        owner: kriti
+        group: kriti
+    - name: Bring the application up
+      make:
+        chdir: /home/kriti/mini/docker/stag
+        target: run
+    - name: Install "secure-delete" package
+      apt:
+        name: secure-delete
+        state: present
+    - name: Secure deleting application files
+      command: srm -vzr /home/kriti/mini
